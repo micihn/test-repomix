@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="laporan_piutang_wizard_view" model="ir.ui.view">
+            <field name="name">laporan.piutang.wizard.form</field>
+            <field name="model">laporan.piutang</field>
+            <field name="arch" type="xml">
+                <form string="Laporan Piutang ver 2">
+                    <group>
+                        <group>
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="all_customer"/>
+                            <field name="customer_ids" widget="many2many_tags" 
+                                   attrs="{'invisible': [('all_customer', '=', True)], 
+                                          'required': [('all_customer', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <group string="Filter">
+                        <group>
+                            <field name="filter_unpaid"/>
+                            <field name="filter_paid"/>
+                        </group>
+                        <group>
+                            <field name="filter_not_rekap"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Print" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_laporan_piutang" model="ir.actions.act_window">
+            <field name="name">Laporan Piutang ver 2</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">laporan.piutang</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_laporan_piutang"
+                  name="Laporan Piutang ver 2"
+                  parent="rekap_order_pengiriman.rekap_order_root"
+                  action="action_wizard_laporan_piutang"
+                  sequence="20"/>
+    </data>
+</odoo>

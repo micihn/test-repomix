@@ -1,0 +1,47 @@
+<odoo>
+	<data>
+		<record id="laporan_rekap_wiz_form" model="ir.ui.view">
+			<field name="name">laporan_rekap_wiz_form</field>
+			<field name="model">laporan.rekap.wiz</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<group>
+								<field name="company_id"/>
+								<label for="start_date" string="Tanggal"/>
+								<div class="o_row">
+									<span><field name="start_date"/></span>
+									<span><field name="end_date"/></span>
+								</div>
+							</group>
+							<group>
+								<field name="all_customer"/>
+								<field name="customer_ids" widget="many2many_tags" attrs="{'invisible': [('all_customer', '=', True)]}"/>
+							</group>
+						</group>
+						<group string="Filter">
+							<field name="unpaid"/>
+							<field name="paid"/>
+							<field name="no_summary"/>
+						</group>
+					</sheet>
+					<footer>
+						<button name="print_report" string="Print Laporan" type="object" class="oe_highlight"/>
+						<button string="Cancel" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="laporan_rekap_wiz_act" model="ir.actions.act_window">
+			<field name="name">Laporan Rekap Piutang</field>
+			<field name="res_model">laporan.rekap.wiz</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem id="laporan_rekap_wiz_menu" action="laporan_rekap_wiz_act" name="Laporan Piutang" parent="rekap_order_pengiriman.rekap_order_root" sequence="10"/>
+	</data>
+</odoo>

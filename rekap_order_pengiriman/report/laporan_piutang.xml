@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="paperformat_laporan_piutang" model="report.paperformat">
+        <field name="name">Laporan Piutang</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+    </record>
+
+    <template id="report_laporan_piutang">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h3>Laporan Piutang Setoran <span t-field="res_company.name"/></h3>
+                        <p><span t-field="o.date_start"/> S/D <span t-field="o.date_end"/></p>
+
+                        <t t-set="grand_total_saldo" t-value="0"/>
+                        <t t-set="grand_total_belum_rekap" t-value="0"/>
+
+                        <t t-foreach="o.form['report_data'].items()" t-as="customer_data">
+                            <div style="page-break-inside: avoid;">
+                                <h4>Daftar Piutang <span t-esc="customer_data[1]['customer'].name"/>
+                                    <span class="float-right" t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                                </h4>
+                                
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Tanggal Rekap</th>
+                                            <th class="text-right">Jumlah</th>
+                                            <th class="text-right">Bayar</th>
+                                            <th class="text-right">Saldo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="customer_data[1]['orders']" t-as="order">
+                                            <td><span t-esc="order['kode']"/></td>
+                                            <td><span t-esc="order['tanggal']" t-options='{"widget": "date"}'/></td>
+                                            <td class="text-right">
+                                                <span t-esc="order['jumlah']" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="order['bayar']" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="order['saldo']" t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" class="text-right"><strong>Total:</strong></td>
+                                            <td class="text-right">
+                                                <strong t-esc="customer_data[1]['total_saldo']" 
+                                                        t-options='{"widget": "float", "precision": 2}'/>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                                <div class="row">
+                                    <div class="col-8">
+                                        <p>Sisa Piutang Seluruhnya</p>
+                                        <t t-if="o.filter_not_rekap">
+                                            <p>Rincian yang belum masuk</p>
+                                        </t>
+                                        <p>Uang Muka</p>
+                                        <p><strong>Total</strong></p>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <p t-esc="customer_data[1]['total_saldo']" 
+                                           t-options='{"widget": "float", "precision": 2}'/>
+                                        <t t-if="o.filter_not_rekap">
+                                            <p t-esc="customer_data[1]['total_belum_rekap']" 
+                                               t-options='{"widget": "float", "precision": 2}'/>
+                                        </t>
+                                        <p>0.00</p>
+                                        <p><strong t-esc="customer_data[1]['total_saldo'] + customer_data[1]['total_belum_rekap']" 
+                                                  t-options='{"widget": "float", "precision": 2}'/></p>
+                                    </div>
+                                </div>
+
+                                <t t-set="grand_total_saldo" t-value="grand_total_saldo + customer_data[1]['total_saldo']"/>
+                                <t t-set="grand_total_belum_rekap" 
+                                   t-value="grand_total_belum_rekap + customer_data[1]['total_belum_rekap']"/>
+                            </div>
+                            <div class="page-break"/>
+                        </t>
+
+                        <!-- Grand Total Section -->
+                        <div class="row mt-5">
+                            <div class="col-8">
+                                <p><strong>Total Sisa Piutang Seluruhnya</strong></p>
+                                <t t-if="o.filter_not_rekap">
+                                    <p><strong>Total Rincian yang belum masuk</strong></p>
+                                </t>
+                                <p><strong>Uang Muka</strong></p>
+                                <p><strong>Total</strong></p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <p><strong t-esc="grand_total_saldo" t-options='{"widget": "float", "precision": 2}'/></p>
+                                <t t-if="o.filter_not_rekap">
+                                    <p><strong t-esc="grand_total_belum_rekap" t-options='{"widget": "float", "precision": 2}'/></p>
+                                </t>
+                                <p><strong>0.00</strong></p>
+                                <p><strong t-esc="grand_total_saldo + grand_total_belum_rekap" 
+                                          t-options='{"widget": "float", "precision": 2}'/></p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_laporan_piutang" model="ir.actions.report">
+        <field name="name">Laporan Piutang</field>
+        <field name="model">laporan.piutang</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rekap_order_pengiriman.report_laporan_piutang</field>
+        <field name="report_file">rekap_order_pengiriman.report_laporan_piutang</field>
+        <field name="paperformat_id" ref="paperformat_laporan_piutang"/>
+    </record>
+</odoo>

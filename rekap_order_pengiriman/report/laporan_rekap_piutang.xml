@@ -1,0 +1,111 @@
+<odoo>
+	<data>
+	    <report id="laporan_rekap_piutang_report"
+	            model="laporan.rekap.wiz"
+	            string="Laporan Rekap Piutang"
+	            report_type="qweb-pdf"
+	            name="rekap_order_pengiriman.laporan_rekap_piutang_template"
+	            menu="False"/>
+
+	    <template id="laporan_rekap_piutang_template">
+	        <t t-call="web.html_container">
+	        	<style>
+	        		*{
+	        			font-family: sans-serif;
+	        		}
+	        	</style>
+        		<div class="page">
+                    <t t-set="total_unpaid" t-value="0"/>
+					<t t-set="total_not_listed" t-value="0"/>
+					<t t-set="total_down_payment" t-value="0"/>
+
+                    <h3 style="margin: 0">Laporan Piutang Setoran <span t-out="company_id.name"/></h3>
+                    <p style="margin-bottom: 2em"><span t-out="start_date.strftime('%d/%m/%Y')"/> s/d <span t-out="end_date.strftime('%d/%m/%Y')"/></p>
+
+                    <t t-foreach="docs" t-as="o" style="margin">
+                        <div style="page-break-inside: avoid; margin-top: 2em; margin-bottom: 2em">
+                            <div class="row" style="border-bottom: 3px solid black">
+                            	<div class="col-4"><b>Daftar Piutang <span t-out="o['customer_id'].name"/></b></div>
+                            	<div class="col-4"/>
+                            	<div class="col-4 text-right"><b><t t-out="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></b></div>
+                            </div>
+
+                            <table class="table table-sm" style="width: 100%; margin-top: 1em">
+                                <tr>
+                                    <th style="text-align: left">Kode</th>
+                                    <th style="text-align: left">Tanggal Rekap</th>
+                                    <th style="text-align: right">Jumlah</th>
+                                    <th style="text-align: right">Bayar</th>
+                                    <th style="text-align: right">Saldo</th>
+                                </tr>
+                                <tr t-foreach="o['line']" t-as="order" style="border-top: 1px dashed black">
+                                    <td style="text-align: left"><span t-out="order['invoice_id'].name"/></td>
+                                    <td style="text-align: left"><span t-out="order['rekap_date']"/></td>
+                                    <td style="text-align: right">
+                                        <span t-out="order['amount_total']" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                    <td style="text-align: right">
+                                        <span t-out="order['amount_paid']" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                    <td style="text-align: right">
+                                        <span t-out="order['amount_unpaid']" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                                <tr style="border-top: 2px solid black">
+                                    <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                    <td style="text-align: right">
+                                        <strong t-out="o['total_unpaid']" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table class="table table-sm" style="margin-top: 2em; border-top: 1px solid black">
+                            	<tr>
+                            		<td style="width: 40%">Sisa Piutang Seluruhnya</td>
+                            		<td style="width: 40%; text-align: right"><t t-out="o['total_unpaid']" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                            	</tr>
+                            	<tr>
+                            		<td style="width: 40%">Rincian yang Belum Masuk</td>
+                            		<td style="width: 40%; text-align: right"><t t-out="o['total_not_listed']" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                            	</tr>
+                            	<tr>
+                            		<td style="width: 40%">Uang Muka</td>
+                            		<td style="width: 40%; text-align: right"><t t-out="o['total_down_payment']" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                            	</tr>
+                            	<tr>
+                            		<td style="width: 40%">Total</td>
+                            		<td style="width: 40%; text-align: right; border-top: 2px solid black"><t t-out="o['total_unpaid'] + o['total_not_listed'] + o['total_down_payment']" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                            	</tr>
+                            </table>
+                            <t t-set="total_unpaid" t-value="total_unpaid + o['total_unpaid']"/>
+							<t t-set="total_not_listed" t-value="total_not_listed + o['total_not_listed']"/>
+							<t t-set="total_down_payment" t-value="total_down_payment + o['total_down_payment']"/>
+                        </div>
+                    </t>
+
+                    <!-- Grand Total Section -->
+                    <div class="row" style="margin-top: 2em; border-top: 4px double black">
+                        <table class="table table-sm">
+                        	<tr>
+                        		<td style="width: 40%">Sisa Piutang Seluruhnya</td>
+                        		<td style="width: 40%; text-align: right"><t t-out="total_unpaid" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                        	</tr>
+                        	<tr>
+                        		<td style="width: 40%">Rincian yang Belum Masuk</td>
+                        		<td style="width: 40%; text-align: right"><t t-out="total_not_listed" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                        	</tr>
+                        	<tr>
+                        		<td style="width: 40%">Uang Muka</td>
+                        		<td style="width: 40%; text-align: right"><t t-out="total_down_payment" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                        	</tr>
+                        	<tr>
+                        		<td style="width: 40%">Total</td>
+                        		<td style="width: 40%; text-align: right; border-top: 2px solid black"><t t-out="total_unpaid + total_not_listed + total_down_payment" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                        	</tr>
+                        </table>
+                    </div>
+                </div>
+	        </t>
+	    </template>
+	</data>
+</odoo>
