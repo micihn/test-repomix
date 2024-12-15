@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_rekap_wizard" model="ir.ui.view">
+        <field name="name">employee.rekap.wizard.form</field>
+        <field name="model">employee.rekap.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Laporan Karyawan Rekap">
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="employee_ids" widget="many2many_tags" 
+                           options="{'no_create': True, 'no_open': True}"/>
+                </group>
+                <footer>
+                    <button name="generate_report" 
+                            string="Generate PDF" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_rekap_wizard" model="ir.actions.act_window">
+        <field name="name">Laporan Karyawan Rekap</field>
+        <field name="res_model">employee.rekap.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_employee_rekap_wizard"/>
+    </record>
+
+    <menuitem id="menu_employee_rekap_wizard"
+              name="Laporan Karyawan Rekap"
+              parent="menu_cash_report"
+              action="action_employee_rekap_wizard"
+              sequence="4"/>
+</odoo>

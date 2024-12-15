@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_employee_rekap" model="ir.actions.report">
+        <field name="name">Laporan Karyawan Rekap</field>
+        <field name="model">employee.rekap.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">cash_report.employee_rekap_template</field>
+        <field name="report_file">cash_report.employee_rekap_template</field>
+        <field name="binding_model_id" ref="model_employee_rekap_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="employee_rekap_template">
+        <t t-call="web.basic_layout">
+            <style>
+                * {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .o_report_layout_background, 
+                .page, 
+                body, 
+                main {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .header, .footer {
+                    display: none !important;
+                }
+                .container {
+                    width: 100% !important;
+                    max-width: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .report-header {
+                    padding: 8px !important;
+                    margin-bottom: 10px;
+                    border-bottom: 1px solid #ddd;
+                    background-color: #f8f9fa;
+                }
+                .report-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .report-table th {
+                    background-color: #f8f9fa;
+                    padding: 6px !important;
+                    border: 1px solid #dee2e6;
+                    font-weight: bold;
+                }
+                .report-table td {
+                    padding: 4px 6px !important;
+                    border: 1px solid #dee2e6;
+                }
+                .text-right {
+                    text-align: right;
+                }
+                .grand-total {
+                    font-weight: bold;
+                    background-color: #f8f9fa;
+                }
+            </style>
+
+            <div class="page" style="font-size: 12px; line-height: 1.3;">
+                <div class="report-header">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px;">Laporan Karyawan Rekap</h3>
+                    <div style="font-size: 12px;">
+                        <p class="compact-text">
+                            <strong>Company: </strong> 
+                            <span t-esc="docs.company_id.name"/>
+                        </p>
+                    </div>
+                </div>
+
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th class="text-right">Total Hutang</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="report_data" t-as="line">
+                            <td><span t-esc="line['identification_id']"/></td>
+                            <td><span t-esc="line['employee_name']"/></td>
+                            <td class="text-right">
+                                <span t-esc="line['total_hutang']" 
+                                      t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                        </tr>
+                        <tr class="grand-total">
+                            <td colspan="2" class="text-right">
+                                <strong>Grand Total</strong>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="sum(float(line['total_hutang']) for line in report_data)" 
+                                        t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

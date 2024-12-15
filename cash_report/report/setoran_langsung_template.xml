@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_setoran_langsung" model="ir.actions.report">
+        <field name="name">Laporan Harian Setoran Langsung</field>
+        <field name="model">setoran.langsung.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">cash_report.setoran_langsung_template</field>
+        <field name="report_file">cash_report.setoran_langsung_template</field>
+        <field name="binding_model_id" ref="model_setoran_langsung_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="setoran_langsung_template">
+        <t t-call="web.basic_layout">
+            <style>
+                /* Same styles as previous reports */
+                * {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .o_report_layout_background, 
+                .page, 
+                body, 
+                main {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .header, .footer {
+                    display: none !important;
+                }
+                .container {
+                    width: 100% !important;
+                    max-width: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .report-header {
+                    padding: 8px !important;
+                    margin-bottom: 10px;
+                    border-bottom: 1px solid #ddd;
+                    background-color: #f8f9fa;
+                }
+                .report-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .report-table th {
+                    background-color: #f8f9fa;
+                    padding: 6px !important;
+                    border: 1px solid #dee2e6;
+                    font-weight: bold;
+                }
+                .report-table td {
+                    padding: 4px 6px !important;
+                    border: 1px solid #dee2e6;
+                }
+                .text-right {
+                    text-align: right;
+                }
+                .grand-total {
+                    font-weight: bold;
+                    background-color: #f8f9fa;
+                }
+            </style>
+
+            <div class="page" style="font-size: 12px; line-height: 1.3;">
+                <div class="report-header">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px;">Laporan Harian Setoran Langsung</h3>
+                    <div style="font-size: 12px;">
+                        <p class="compact-text">
+                            <strong>Period: </strong>
+                            <span t-esc="docs.start_date" t-options='{"widget": "date"}'/>
+                            to
+                            <span t-esc="docs.end_date" t-options='{"widget": "date"}'/>
+                            <strong style="margin-left: 20px;">Company: </strong> 
+                            <span t-esc="docs.company_id.name"/>
+                        </p>
+                    </div>
+                </div>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Kode</th>
+                            <th>Kendaraan</th>
+                            <th class="text-right">Total Order</th>
+                            <th class="text-right">Biaya Fee</th>
+                            <th>Fee Contact</th>
+                            <th class="text-right">Biaya Pembelian</th>
+                            <th>Supplier</th>
+                            <th class="text-right">Total Ongkos</th>
+                            <th>Customer</th>
+                            <th>Vendor</th>
+                            <th class="text-right">Sisa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="report_data" t-as="line">
+                            <td><span t-esc="line['tanggal']" t-options='{"widget": "date"}'/></td>
+                            <td><span t-esc="line['kode']"/></td>
+                            <td><span t-esc="line['kendaraan']"/></td>
+                            <td class="text-right">
+                                <span t-esc="line['total_order']" t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="line['biaya_fee']" t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td><span t-esc="line['fee_contact_names']"/></td>
+                            <td class="text-right">
+                                <span t-esc="line['biaya_pembelian']" t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td><span t-esc="line['supplier_names']"/></td>
+                            <td class="text-right">
+                                <span t-esc="line['total_ongkos']" t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td><span t-esc="line['customer_names']"/></td>
+                            <td><span t-esc="line['vendor_name']"/></td>
+                            <td class="text-right">
+                                <span t-esc="line['sisa']" t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                        </tr>
+                        <tr class="grand-total">
+                            <td colspan="3" class="text-right">
+                                <strong>Grand Total</strong>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="sum(line['total_order'] for line in report_data)" 
+                                        t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="sum(line['biaya_fee'] for line in report_data)" 
+                                        t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td></td>
+                            <td class="text-right">
+                                <strong t-esc="sum(line['biaya_pembelian'] for line in report_data)" 
+                                        t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td></td>
+                            <td class="text-right">
+                                <strong t-esc="sum(line['total_ongkos'] for line in report_data)" 
+                                        t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">
+                                <strong t-esc="sum(line['sisa'] for line in report_data)" 
+                                        t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

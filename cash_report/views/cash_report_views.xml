@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Window action -->
+    <record id="action_cash_report_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Cash Report</field>
+        <field name="res_model">cash.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_cash_report_wizard"/>
+    </record>
+
+    <!-- Menu items -->
+    <menuitem id="menu_cash_report"
+              name="Cash Reports"
+              parent="account.menu_finance_reports"
+              sequence="15"/>
+
+    <menuitem id="menu_cash_report_wizard"
+              name="Generate Cash Report"
+              parent="menu_cash_report"
+              action="action_cash_report_wizard"
+              sequence="1"/>
+</odoo>
