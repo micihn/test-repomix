@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cash Reports Menu Section -->
+    <record id="menu_cash_reports_section" model="ir.ui.menu">
+        <field name="name">Cash Reports</field>
+        <field name="parent_id" ref="menu_iframe_dashboard_root"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Generate Cash Report Menu -->
+    <record id="menu_generate_cash_report" model="ir.ui.menu">
+        <field name="name">Generate Cash Report</field>
+        <field name="parent_id" ref="menu_cash_reports_section"/>
+        <field name="action" ref="cash_report.action_cash_report_wizard"/>
+        <field name="sequence">1</field>
+    </record>
+
+    <!-- Laporan Harian Setoran Menu -->
+    <record id="menu_setoran_report" model="ir.ui.menu">
+        <field name="name">Laporan Harian Setoran</field>
+        <field name="parent_id" ref="menu_cash_reports_section"/>
+        <field name="action" ref="cash_report.action_setoran_report_wizard"/>
+        <field name="sequence">2</field>
+    </record>
+
+    <!-- Laporan Harian Setoran Langsung Menu -->
+    <record id="menu_setoran_langsung" model="ir.ui.menu">
+        <field name="name">Laporan Harian Setoran Langsung</field>
+        <field name="parent_id" ref="menu_cash_reports_section"/>
+        <field name="action" ref="cash_report.action_setoran_langsung_wizard"/>
+        <field name="sequence">3</field>
+    </record>
+
+    <!-- Laporan Karyawan Rekap Menu -->
+    <record id="menu_employee_rekap" model="ir.ui.menu">
+        <field name="name">Laporan Karyawan Rekap</field>
+        <field name="parent_id" ref="menu_cash_reports_section"/>
+        <field name="action" ref="cash_report.action_employee_rekap_wizard"/>
+        <field name="sequence">4</field>
+    </record>
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main IFrame Dashboard Menu -->
+    <menuitem id="menu_iframe_dashboard_root"
+              name="IFrame Dashboards"
+              web_icon="iframe_dashboard,static/description/icon.png"
+              sequence="100"/>
+
+    <!-- Dashboards submenu -->
+    <menuitem id="menu_iframe_dashboard"
+              name="Dashboards"
+              action="action_iframe_dashboard"
+              parent="menu_iframe_dashboard_root"
+              sequence="10"
+              groups="iframe_dashboard.group_iframe_dashboard_user,iframe_dashboard.group_iframe_dashboard_admin"/>
+</odoo>
