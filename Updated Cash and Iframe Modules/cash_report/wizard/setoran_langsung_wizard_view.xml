@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_setoran_langsung_wizard" model="ir.ui.view">
+        <field name="name">setoran.langsung.wizard.form</field>
+        <field name="model">setoran.langsung.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Laporan Harian Setoran Langsung">
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </group>
+                <footer>
+                    <button name="generate_report" 
+                            string="Generate PDF" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_setoran_langsung_wizard" model="ir.actions.act_window">
+        <field name="name">Laporan Harian Setoran Langsung</field>
+        <field name="res_model">setoran.langsung.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_setoran_langsung_wizard"/>
+    </record>
+</odoo>

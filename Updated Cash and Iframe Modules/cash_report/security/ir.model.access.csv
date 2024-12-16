@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cash_report_accountant,cash.report.accountant,model_cash_report,account.group_account_user,1,1,1,1
+access_cash_report_wizard_accountant,cash.report.wizard.accountant,model_cash_report_wizard,account.group_account_user,1,1,1,1
+
+access_setoran_report_wizard_user,setoran.report.wizard.user,model_setoran_report_wizard,account.group_account_user,1,1,1,0
+access_setoran_report_wizard_manager,setoran.report.wizard.manager,model_setoran_report_wizard,account.group_account_manager,1,1,1,1
+
+access_setoran_langsung_wizard_user,setoran.langsung.wizard.user,model_setoran_langsung_wizard,account.group_account_user,1,1,1,0
+access_setoran_langsung_wizard_manager,setoran.langsung.wizard.manager,model_setoran_langsung_wizard,account.group_account_manager,1,1,1,1
+
+access_employee_rekap_wizard_user,employee.rekap.wizard.user,model_employee_rekap_wizard,account.group_account_user,1,1,1,0
+access_employee_rekap_wizard_manager,employee.rekap.wizard.manager,model_employee_rekap_wizard,account.group_account_manager,1,1,1,1
