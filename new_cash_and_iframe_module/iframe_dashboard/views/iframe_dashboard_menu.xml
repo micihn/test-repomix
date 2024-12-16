@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main IFrame Dashboard Menu -->
+    <menuitem id="menu_iframe_dashboard_root"
+              name="IFrame Dashboards"
+              web_icon="iframe_dashboard,static/description/icon.png"
+              sequence="100"/>
+</odoo>

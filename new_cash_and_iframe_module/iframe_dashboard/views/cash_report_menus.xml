@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cash Reports Menu Section -->
+    <record id="menu_cash_reports" model="ir.ui.menu">
+        <field name="name">Cash Reports</field>
+        <field name="parent_id" ref="menu_iframe_dashboard_root"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <menuitem id="menu_generate_cash_report"
+              name="Generate Cash Report"
+              parent="menu_cash_reports"
+              action="cash_report.action_cash_report_wizard"
+              sequence="1"/>
+
+    <menuitem id="menu_setoran_report"
+              name="Laporan Harian Setoran"
+              parent="menu_cash_reports"
+              action="cash_report.action_setoran_report_wizard"
+              sequence="2"/>
+
+    <menuitem id="menu_setoran_langsung"
+              name="Laporan Harian Setoran Langsung"
+              parent="menu_cash_reports"
+              action="cash_report.action_setoran_langsung_wizard"
+              sequence="3"/>
+
+    <menuitem id="menu_employee_rekap"
+              name="Laporan Karyawan Rekap"
+              parent="menu_cash_reports"
+              action="cash_report.action_employee_rekap_wizard"
+              sequence="4"/>
+</odoo>
