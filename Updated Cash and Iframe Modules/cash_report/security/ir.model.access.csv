@@ -10,3 +10,15 @@ access_setoran_langsung_wizard_manager,setoran.langsung.wizard.manager,model_set
 
 access_employee_rekap_wizard_user,employee.rekap.wizard.user,model_employee_rekap_wizard,account.group_account_user,1,1,1,0
 access_employee_rekap_wizard_manager,employee.rekap.wizard.manager,model_employee_rekap_wizard,account.group_account_manager,1,1,1,1
+
+access_stock_receipt_wizard_user,stock.receipt.wizard.user,model_stock_receipt_wizard,stock.group_stock_user,1,1,1,0
+access_stock_receipt_wizard_manager,stock.receipt.wizard.manager,model_stock_receipt_wizard,stock.group_stock_manager,1,1,1,1
+
+access_return_receipt_wizard_user,return.receipt.wizard.user,model_return_receipt_wizard,stock.group_stock_user,1,1,1,0
+access_return_receipt_wizard_manager,return.receipt.wizard.manager,model_return_receipt_wizard,stock.group_stock_manager,1,1,1,1
+
+access_sparepart_out_wizard_user,sparepart.out.wizard.user,model_sparepart_out_wizard,stock.group_stock_user,1,1,1,0
+access_sparepart_out_wizard_manager,sparepart.out.wizard.manager,model_sparepart_out_wizard,stock.group_stock_manager,1,1,1,1
+
+access_sparepart_return_wizard_user,sparepart.return.wizard.user,model_sparepart_return_wizard,stock.group_stock_user,1,1,1,0
+access_sparepart_return_wizard_manager,sparepart.return.wizard.manager,model_sparepart_return_wizard,stock.group_stock_manager,1,1,1,1

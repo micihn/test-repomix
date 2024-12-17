@@ -10,21 +10,27 @@
         - Date range selection
         - PDF export capability
     """,
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account', 'stock'],
     'data': [
         'security/ir.model.access.csv',
-        'report/cash_report_template.xml',
-        'report/setoran_report_template.xml',
-        'report/setoran_langsung_template.xml',
-        'report/employee_rekap_template.xml',
         'wizard/cash_report_wizard_view.xml',
         'wizard/setoran_report_wizard_view.xml',
         'wizard/setoran_langsung_wizard_view.xml',
         'wizard/employee_rekap_wizard_view.xml',
+        'wizard/stock_receipt_wizard_view.xml',
+        'wizard/sparepart_out_wizard_view.xml',
+        'wizard/sparepart_return_wizard_view.xml',
+        'report/cash_report_template.xml',
+        'report/setoran_report_template.xml',
+        'report/setoran_langsung_template.xml',
+        'report/employee_rekap_template.xml',
+        'report/stock_receipt_template.xml',
+        'report/return_receipt_template.xml',
+        'report/sparepart_out_template.xml',
+        'report/sparepart_return_template.xml',
     ],
     'installable': True,
     'application': False,
     'auto_install': False,
     'license': 'LGPL-3',
 }
-

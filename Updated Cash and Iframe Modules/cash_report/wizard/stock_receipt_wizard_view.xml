@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_receipt_wizard" model="ir.ui.view">
+        <field name="name">stock.receipt.wizard.form</field>
+        <field name="model">stock.receipt.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Laporan Penerimaan">
+                <group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <field name="all_products"/>
+                        <field name="product_ids" 
+                               widget="many2many_tags"
+                               options="{'no_create': True, 'no_open': True}"
+                               attrs="{'invisible': [('all_products', '=', True)]}"/>
+                        <field name="sort_by_reference"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="generate_report" 
+                            string="Generate PDF" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stock_receipt_wizard" model="ir.actions.act_window">
+        <field name="name">Laporan Penerimaan</field>
+        <field name="res_model">stock.receipt.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_stock_receipt_wizard"/>
+    </record>
+
+    <record id="view_return_receipt_wizard" model="ir.ui.view">
+        <field name="name">return.receipt.wizard.form</field>
+        <field name="model">return.receipt.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Laporan Penerimaan (RETUR)">
+                <group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <field name="all_products"/>
+                        <field name="product_ids" 
+                            widget="many2many_tags"
+                            options="{'no_create': True, 'no_open': True}"
+                            attrs="{'invisible': [('all_products', '=', True)]}"/>
+                        <field name="sort_by_reference"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="generate_report" 
+                            string="Generate PDF" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_return_receipt_wizard" model="ir.actions.act_window">
+        <field name="name">Laporan Penerimaan (RETUR)</field>
+        <field name="res_model">return.receipt.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_return_receipt_wizard"/>
+    </record>
+
+    <!-- Menu for Laporan Stok -->
+    <menuitem id="menu_stock_reports"
+              name="Laporan Stok"
+              parent="iframe_dashboard.menu_iframe_dashboard_root"
+              sequence="30"/>
+
+    <!-- Submenu for Laporan Penerimaan -->
+    <menuitem id="menu_stock_receipt_report"
+              name="Laporan Penerimaan"
+              parent="menu_stock_reports"
+              action="action_stock_receipt_wizard"
+              sequence="1"/>
+
+    <menuitem id="menu_return_receipt_report"
+              name="Laporan Penerimaan (RETUR)"
+              parent="menu_stock_reports"
+              action="action_return_receipt_wizard"
+              sequence="2"/>
+
+    <menuitem id="menu_sparepart_out_report"
+            name="Laporan Pengeluaran Spare Parts"
+            parent="menu_stock_reports"
+            action="action_sparepart_out_wizard"
+            sequence="3"/>
+</odoo>

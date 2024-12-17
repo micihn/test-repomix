@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_return_receipt_report" model="ir.actions.report">
+        <field name="name">Laporan Penerimaan (RETUR)</field>
+        <field name="model">return.receipt.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">cash_report.return_receipt_template</field>
+        <field name="report_file">cash_report.return_receipt_template</field>
+        <field name="binding_model_id" ref="model_return_receipt_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="return_receipt_template">
+        <t t-call="web.basic_layout">
+            <style>
+                /* Include styles directly */
+                * {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .o_report_layout_background, 
+                .page, 
+                body, 
+                main {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .header, .footer {
+                    display: none !important;
+                }
+                .container {
+                    width: 100% !important;
+                    max-width: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .report-header {
+                    padding: 8px !important;
+                    margin-bottom: 10px;
+                    border-bottom: 1px solid #ddd;
+                    background-color: #f8f9fa;
+                }
+                .report-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 15px !important;
+                }
+                .report-table th {
+                    background-color: #f8f9fa;
+                    padding: 6px !important;
+                    border: 1px solid #dee2e6;
+                    font-weight: bold;
+                }
+                .report-table td {
+                    padding: 4px 6px !important;
+                    border: 1px solid #dee2e6;
+                }
+                .text-right {
+                    text-align: right;
+                }
+                .category-header {
+                    font-weight: bold;
+                    font-size: 14px;
+                    margin-top: 20px !important;
+                    margin-bottom: 10px !important;
+                }
+                .subtotal-row {
+                    background-color: #f8f9fa;
+                    font-weight: bold;
+                }
+                .grand-total {
+                    font-weight: bold;
+                    background-color: #e9ecef;
+                    font-size: 13px;
+                }
+            </style>
+
+            <div class="page" style="font-size: 12px; line-height: 1.3;">
+                <div class="report-header">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px;">Laporan Penerimaan (RETUR)</h3>
+                    <div style="font-size: 12px;">
+                        <p class="compact-text">
+                            <strong>Period: </strong>
+                            <span t-esc="docs.start_date" t-options='{"widget": "date"}'/>
+                            to
+                            <span t-esc="docs.end_date" t-options='{"widget": "date"}'/>
+                            <strong style="margin-left: 20px;">Company: </strong> 
+                            <span t-esc="docs.company_id.name"/>
+                        </p>
+                    </div>
+                </div>
+
+                <t t-if="not report_data">
+                    <p>No data found for the selected criteria.</p>
+                </t>
+                <t t-else="">
+                    <t t-set="categories" t-value="list(set(line['category_name'] for line in report_data))"/>
+                    <t t-set="grand_total" t-value="0"/>
+
+                    <t t-foreach="categories" t-as="category">
+                        <div class="category-header">
+                            <span t-esc="category"/>
+                        </div>
+
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Kode Barang</th>
+                                    <th>Nama Barang</th>
+                                    <th>Faktur</th>
+                                    <th class="text-right">QTY</th>
+                                    <th class="text-right">Harga</th>
+                                    <th class="text-right">Jumlah</th>
+                                    <th>Supplier</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="category_total" t-value="0"/>
+                                <t t-foreach="report_data" t-as="line">
+                                    <t t-if="line['category_name'] == category">
+                                        <tr>
+                                            <td><span t-esc="line['line_no']"/></td>
+                                            <td><span t-esc="line['date']" t-options='{"widget": "date"}'/></td>
+                                            <td><span t-esc="line['product_code']"/></td>
+                                            <td><span t-esc="line['product_name']"/></td>
+                                            <td><span t-esc="line['receipt_reference']"/></td>
+                                            <td class="text-right">
+                                                <span t-esc="'%.2f' % line['quantity']"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="'%.2f' % line['unit_cost']"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="'%.2f' % line['total_value']"/>
+                                                <t t-set="category_total" t-value="category_total + line['total_value']"/>
+                                            </td>
+                                            <td><span t-esc="line['supplier_name'] or ''"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <tr class="subtotal-row">
+                                    <td colspan="7" class="text-right">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="'%.2f' % category_total"/>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <t t-set="grand_total" t-value="grand_total + category_total"/>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <table class="report-table">
+                        <tr class="grand-total">
+                            <td colspan="7" class="text-right">
+                                <strong>GRAND TOTAL</strong>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="'%.2f' % grand_total"/>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>
