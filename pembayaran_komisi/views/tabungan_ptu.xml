@@ -1,0 +1,58 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="tabungan_ptu_tree_view" model="ir.ui.view">
+        <field name="name">tabungan.ptu.tree.view</field>
+        <field name="model">tabungan.ptu</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="kode"/>
+                <field name="karyawan"/>
+                <field name="tanggal"/>
+                <field name="saldo"/>
+                <field name="nominal_ptu"/>
+                <field name="keterangan"/>
+                <field name="state" widget="badge" decoration-success="state=='paid'"
+                       decoration-info="state=='draft'" decoration-warning="state=='edit'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="tabungan_ptu_form_view" model="ir.ui.view">
+        <field name="name">tabungan.ptu.form.view</field>
+        <field name="model">tabungan.ptu</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="create_ptu" string="Buat PTU" type="object" 
+                            class="btn-primary" attrs="{'invisible': [('state', 'in', ['paid', 'edit'])]}"/>
+                    <button name="action_edit" string="Edit" type="object" 
+                            class="btn-primary" attrs="{'invisible': [('state', '!=', 'paid')]}"/>
+                    <button name="action_save_edit" string="Simpan" type="object" 
+                            class="btn-primary" attrs="{'invisible': [('state', '!=', 'edit')]}"/>
+                    <button name="action_cancel_edit" string="Batal" type="object" 
+                            class="btn-secondary" attrs="{'invisible': [('state', '!=', 'edit')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,edit,paid"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="kode" readonly="1" force_save="1"/>
+                        <field name="karyawan" attrs="{'readonly': [('state', 'in', ['paid', 'edit'])]}"/>
+                        <field name="tanggal" attrs="{'readonly': [('state', 'in', ['paid', 'edit'])]}"/>
+                        <field name="saldo"/>
+                        <field name="nominal_ptu" attrs="{'readonly': [('state', 'not in', ['draft', 'edit'])]}"/>
+                        <field name="keterangan" attrs="{'readonly': [('state', 'not in', ['draft', 'edit'])]}"/>
+                        <field name="company_id" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="tabungan_ptu_action" model="ir.actions.act_window">
+        <field name="name">Tabungan PTU</field>
+        <field name="res_model">tabungan.ptu</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
