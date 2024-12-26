@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_fleet_pendapatan_v2">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <style type="text/css">
+                    .default-font {
+                        font-family: 'Arial', sans-serif;
+                        line-height: 1.4;
+                    }
+                    .report-title {
+                        font-size: 16px;
+                        font-weight: bold;
+                        text-align: center;
+                        margin-bottom: 8px;
+                    }
+                    .report-subtitle {
+                        font-size: 14px;
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                    .default-font-size {
+                        font-size: 14px;
+                    }
+                    .bottom-spacing {
+                        margin-bottom: 6px;
+                    }
+                    .bottom-spacing-extra {
+                        margin-bottom: 15px;
+                    }
+                    .custom-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 10px 0;
+                    }
+                    .custom-table th {
+                        background-color: #f8f9fa;
+                        padding: 8px;
+                        border: 1px solid #000;
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+                    .custom-table td {
+                        padding: 8px;
+                        border: 1px solid #000;
+                        font-size: 14px;
+                    }
+                    .category-header {
+                        font-size: 15px;
+                        font-weight: bold;
+                        background-color: #e9ecef;
+                        padding: 8px;
+                        margin: 15px 0 10px 0;
+                    }
+                    .total-row {
+                        font-weight: bold;
+                        background-color: #f8f9fa;
+                    }
+                    .text-right {
+                        text-align: right;
+                    }
+                    .text-center {
+                        text-align: center;
+                    }
+                    /* Ensure numbers don't break across lines */
+                    .number-cell {
+                        white-space: nowrap;
+                    }
+                </style>
+
+                <div class="page default-font">
+                    <div class="report-title">
+                        LAPORAN PENDAPATAN TRUK <t t-esc="company_name.upper()"/>
+                    </div>
+                    <div class="report-subtitle">
+                        <t t-if="date_start and date_end">
+                            <t t-esc="date_start"/> S/D <t t-esc="date_end"/>
+                        </t>
+                        <t t-if="year">
+                            TAHUN <t t-esc="year"/>
+                        </t>
+                    </div>
+
+                    <t t-foreach="data" t-as="category">
+                        <div class="category-header">
+                            <t t-esc="category['category_name']"/>
+                        </div>
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">No Truk</th>
+                                    <th style="width: 10%;">Tahun Rakit</th>
+                                    <th style="width: 15%;">Hasil Jasa</th>
+                                    <th style="width: 15%;">Pengeluaran</th>
+                                    <th style="width: 5%;">%</th>
+                                    <th style="width: 15%;">Spare Part</th>
+                                    <th style="width: 5%;">%</th>
+                                    <th style="width: 15%;">Sisa</th>
+                                    <th style="width: 5%;">%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="category['vehicles']" t-as="vehicle">
+                                    <tr>
+                                        <td class="text-center"><t t-esc="vehicle['license_plate']"/></td>
+                                        <td class="text-center"><t t-esc="vehicle['year']"/></td>
+                                        <td class="text-right number-cell">
+                                            <t t-esc="'{:,.0f}'.format(vehicle['hasil_jasa'])"/>
+                                        </td>
+                                        <td class="text-right number-cell">
+                                            <t t-esc="'{:,.0f}'.format(vehicle['pengeluaran'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="'{:.0f}'.format(vehicle['pengeluaran_percent'])"/>%
+                                        </td>
+                                        <td class="text-right number-cell">
+                                            <t t-esc="'{:,.0f}'.format(vehicle['spare_part'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="'{:.0f}'.format(vehicle['spare_part_percent'])"/>%
+                                        </td>
+                                        <td class="text-right number-cell">
+                                            <t t-esc="'{:,.0f}'.format(vehicle['sisa'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="'{:.0f}'.format(vehicle['sisa_percent'])"/>%
+                                        </td>
+                                    </tr>
+                                </t>
+                                <!-- Category Total -->
+                                <tr class="total-row">
+                                    <td colspan="2">TOTAL:</td>
+                                    <td class="text-right number-cell">
+                                        <t t-esc="'{:,.0f}'.format(category['total_hasil_jasa'])"/>
+                                    </td>
+                                    <td class="text-right number-cell">
+                                        <t t-esc="'{:,.0f}'.format(category['total_pengeluaran'])"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="'{:.0f}'.format(category['total_pengeluaran_percent'])"/>%
+                                    </td>
+                                    <td class="text-right number-cell">
+                                        <t t-esc="'{:,.0f}'.format(category['total_spare_part'])"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="'{:.0f}'.format(category['total_spare_part_percent'])"/>%
+                                    </td>
+                                    <td class="text-right number-cell">
+                                        <t t-esc="'{:,.0f}'.format(category['total_sisa'])"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="'{:.0f}'.format(category['total_sisa_percent'])"/>%
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-bottom: 20px;"></div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

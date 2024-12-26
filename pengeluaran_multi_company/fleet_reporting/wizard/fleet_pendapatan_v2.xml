@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_pendapatan_v2_form" model="ir.ui.view">
+        <field name="name">fleet.pendapatan.v2.form</field>
+        <field name="model">fleet.pendapatan.v2</field>
+        <field name="arch" type="xml">
+            <form string="Pendapatan Truk">
+                <group>
+                    <group string="Kendaraan">
+                        <field name="all_fleet"/>
+                        <field name="fleet_ids" widget="many2many_tags" 
+                               attrs="{'invisible': [('all_fleet', '=', True)]}"/>
+                    </group>
+                    <group string="Filter Kendaraan">
+                        <field name="all_years"/>
+                        <field name="model_year" 
+                               attrs="{'invisible': [('all_years', '=', True)]}"/>
+                        <field name="all_types"/>
+                        <field name="vehicle_type_id"
+                               attrs="{'invisible': [('all_types', '=', True)]}"/>
+                    </group>
+                    <group string="Filter Waktu">
+                        <field name="filter_type"/>
+                        <field name="date_start" 
+                               attrs="{'invisible': [('filter_type', '=', 'year')],
+                                      'required': [('filter_type', '=', 'date_range')]}"/>
+                        <field name="date_end"
+                               attrs="{'invisible': [('filter_type', '=', 'year')],
+                                      'required': [('filter_type', '=', 'date_range')]}"/>
+                        <field name="year"
+                               attrs="{'invisible': [('filter_type', '=', 'date_range')],
+                                      'required': [('filter_type', '=', 'year')]}"/>
+                    </group>
+                    <group string="Berdasarkan">
+                        <field name="date_based_on" widget="radio"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="generate_report" string="Generate Report" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fleet_pendapatan_v2" model="ir.actions.act_window">
+        <field name="name">Pendapatan Truk ver 2</field>
+        <field name="res_model">fleet.pendapatan.v2</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_fleet_pendapatan_v2"
+              name="Pendapatan Truk ver 2"
+              action="action_fleet_pendapatan_v2"
+              parent="fleet.menu_fleet_reporting"
+              sequence="2"
+              groups="fleet.fleet_group_manager"/>
+</odoo>

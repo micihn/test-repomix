@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="service_fleet_report" model="ir.ui.view">
+        <field name="name">service.fleet.report.form</field>
+        <field name="model">service.fleet.report</field>
+        <field name="arch" type="xml">
+            <form string="Service Fleet Report">
+                <group>
+                    <group>
+                        <field name="semua_kendaraan"/>
+                        <field name="rekap" attrs="{'invisible': [('semua_kendaraan', '=', False)]}"/>
+                        <field name="kendaraan" 
+                               attrs="{'invisible': ['|', 
+                                                   ('semua_kendaraan', '=', True),
+                                                   '|',
+                                                   ('model_id', '!=', False),
+                                                   ('model_year', '!=', False)],
+                                      'required': [('semua_kendaraan', '=', False),
+                                                 ('model_id', '=', False),
+                                                 ('model_year', '=', False)]}"/>
+                    </group>
+                    <group string="Filter Model" 
+                           attrs="{'invisible': [('kendaraan', '!=', False)]}">
+                        <field name="model_id"/>
+                        <field name="model_year"/>
+                    </group>
+                    <group string="Date Range">
+                        <field name="tanggal_start" required="1"/>
+                        <field name="tanggal_finish" required="1"/>
+                    </group>
+                    <field name="services" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="generate_report" string="Print" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_service_fleet_report" model="ir.actions.act_window">
+        <field name="name">Service Fleet Report</field>
+        <field name="res_model">service.fleet.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

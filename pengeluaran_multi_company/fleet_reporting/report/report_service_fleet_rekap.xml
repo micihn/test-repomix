@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="report_service_fleet_rekap">
+            <t t-call="web.html_container">
+                <t t-call="web.internal_layout">
+                    <style type="text/css">
+                        .default-font {
+                            font-family: Lato, sans-serif;
+                        }
+                        .default-font-size {
+                            font-size: 12px;
+                        }
+                        .bottom-spacing {
+                            margin-bottom: 3px;
+                        }
+                        .bottom-spacing-extra {
+                            margin-bottom: 10px;
+                        }
+                        .custom-table th {
+                            border-top: 1px solid #000;
+                            border-bottom: 1px solid #000;
+                        }
+                        .custom-table {
+                            width: 100%;
+                            color: #212529;
+                            vertical-align: middle;
+                            border-color: #ffffff;
+                        }
+                        .custom-table-sm > :not(caption) > * > * {
+                            padding: 0.4rem 0.4rem;
+                        }
+                    </style>
+
+                    <div class="page default-font">
+                        <div class="default-font-size bottom-spacing">
+                            Rekap Laporan Pemakaian Per-Kendaraan
+                        </div>
+
+                        <div class="default-font-size bottom-spacing-extra">
+                            <t t-if="tanggal_start and tanggal_finish">
+                                Periode
+                                <t t-esc="tanggal_start"/>
+                                s/d
+                                <t t-esc="tanggal_finish"/>
+                            </t>
+                        </div>
+
+                        <div class="default-font-size bottom-spacing-extra">
+                            Filter:
+                            <t t-if="model and model_year">
+                                Model: <t t-esc="model"/> - Tahun: <t t-esc="model_year"/>
+                            </t>
+                            <t t-elif="model">
+                                Model: <t t-esc="model"/>
+                            </t>
+                            <t t-elif="model_year">
+                                Tahun Model: <t t-esc="model_year"/>
+                            </t>
+                            <t t-else="">
+                                Semua Model
+                            </t>
+                        </div>
+
+                        <table class="custom-table custom-table-sm">
+                            <thead style="text-align:left">
+                                <tr>
+                                    <th style="text-align:left;">Kendaraan</th>
+                                    <th style="text-align:right;">Total Sparepart</th>
+                                    <th style="text-align:right;">Total Service</th>
+                                    <th style="text-align:right;">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="grand_total_sparepart" t-value="0"/>
+                                <t t-set="grand_total_service" t-value="0"/>
+                                <t t-foreach="summaries" t-as="summary">
+                                    <tr>
+                                        <td style="text-align:left;">
+                                            <t t-esc="summary['license_plate']"/>
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <t t-esc="'{:,}'.format(int(summary['total_sparepart']))"/>
+                                            <t t-set="grand_total_sparepart" t-value="grand_total_sparepart + summary['total_sparepart']"/>
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <t t-esc="'{:,}'.format(int(summary['total_service']))"/>
+                                            <t t-set="grand_total_service" t-value="grand_total_service + summary['total_service']"/>
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <t t-esc="'{:,}'.format(int(summary['total']))"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="border-top: 1px solid #000;">
+                                    <td><strong>Total</strong></td>
+                                    <td style="text-align:right;">
+                                        <strong><t t-esc="'{:,}'.format(int(grand_total_sparepart))"/></strong>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <strong><t t-esc="'{:,}'.format(int(grand_total_service))"/></strong>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <strong><t t-esc="'{:,}'.format(int(grand_total_sparepart + grand_total_service))"/></strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>    
