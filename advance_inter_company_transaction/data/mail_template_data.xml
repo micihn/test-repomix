@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_inter_company_approval_status" model="mail.template">
+            <field name="name">Inter-Company Order Status</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">Inter-Company Order ${object.name}: ${ctx.get('status', '')}</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="partner_to">${object.user_id.partner_id.id}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello ${object.user_id.name},</p>
+    <p>Your inter-company order status has been updated:</p>
+    <ul>
+        <li>Order: ${object.name}</li>
+        <li>Status: ${ctx.get('status', '')}</li>
+        <li>Amount: ${format_amount(object.amount_total, object.currency_id)}</li>
+    </ul>
+    % if ctx.get('note'):
+    <p><strong>Note:</strong> ${ctx.get('note')}</p>
+    % endif
+    <br/>
+    <div style="text-align: center;">
+        <a href="/web#view_type=form&amp;model=sale.order&amp;id=${object.id}" 
+           style="background-color: #875A7B; padding: 10px; text-decoration: none; color: #fff; border-radius: 5px;">
+            View Order
+        </a>
+    </div>
+</div>
+            </field>
+        </record>
+
+        <record id="email_template_inter_company_approval_request" model="mail.template">
+            <field name="name">Inter-Company Approval Request</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">Approval Required: Inter-Company Order ${object.name}</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>A new inter-company order requires your approval:</p>
+    <ul>
+        <li>Order: ${object.name}</li>
+        <li>Company: ${object.company_id.name}</li>
+        <li>Amount: ${format_amount(object.amount_total, object.currency_id)}</li>
+    </ul>
+    <br/>
+    <div style="text-align: center;">
+        <a href="/web#view_type=form&amp;model=sale.order&amp;id=${object.id}" 
+           style="background-color: #875A7B; padding: 10px; text-decoration: none; color: #fff; border-radius: 5px;">
+            Review Order
+        </a>
+    </div>
+</div>
+            </field>
+        </record>
+    </data>
+</odoo>

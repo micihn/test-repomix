@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_inherit_inter_company" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.inter.company</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="picking_type_id" position="after">
+                <field name="is_inter_company" invisible="1"/>
+                <field name="related_picking_id"
+                       readonly="1"
+                       attrs="{'invisible': [('is_inter_company', '=', False)]}"/>
+                <field name="x_nomor_kendaraan" placeholder="Enter vehicle number"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_inherit_inter_company" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit.inter.company</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="is_inter_company" optional="show"/>
+                <field name="x_nomor_kendaraan" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

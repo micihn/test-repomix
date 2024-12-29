@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences -->
+        <record id="seq_inter_company_transaction" model="ir.sequence">
+            <field name="name">Inter-Company Transaction</field>
+            <field name="code">inter.company.transaction</field>
+            <field name="prefix">ICT/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Default Settings -->
+        <record id="default_inter_company_approval_required" model="ir.config_parameter" forcecreate="0">
+            <field name="key">advance_inter_company_transaction.approval_required</field>
+            <field name="value">True</field>
+        </record>
+    </data>
+</odoo>

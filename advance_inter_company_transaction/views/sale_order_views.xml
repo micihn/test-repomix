@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_inter_company" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.inter.company</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                <field name="is_inter_company" invisible="1"/>
+                <field name="requires_approval" invisible="1"/>
+                <field name="inter_company_state" 
+                       attrs="{'invisible': [('is_inter_company', '=', False)]}"
+                       widget="statusbar"
+                       statusbar_visible="draft,waiting_approval,approved,rejected"/>
+            </field>
+            <button name="action_confirm" position="before">
+                <button name="action_approve_inter_company"
+                        type="object"
+                        string="Approve"
+                        class="oe_highlight"
+                        groups="advanced_inter_company.group_inter_company_manager"
+                        attrs="{'invisible': ['|', '|',
+                                            ('is_inter_company', '=', False),
+                                            ('requires_approval', '=', False),
+                                            ('inter_company_state', 'not in', ['draft', 'waiting_approval'])]}"/>
+                <button name="action_reject_inter_company"
+                        type="object"
+                        string="Reject"
+                        groups="advanced_inter_company.group_inter_company_manager"
+                        attrs="{'invisible': ['|', '|',
+                                            ('is_inter_company', '=', False),
+                                            ('requires_approval', '=', False),
+                                            ('inter_company_state', 'not in', ['draft', 'waiting_approval'])]}"/>
+            </button>
+            <notebook position="inside">
+                <page string="Inter-Company Information" 
+                      attrs="{'invisible': [('is_inter_company', '=', False)]}">
+                    <group>
+                        <group>
+                            <field name="related_purchase_id" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="view_order_tree_inherit_inter_company" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit.inter.company</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="is_inter_company" optional="show"/>
+                <field name="inter_company_state" 
+                       optional="show"
+                       attrs="{'invisible': [('is_inter_company', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter_inherit_inter_company" model="ir.ui.view">
+        <field name="name">sale.order.list.select.inherit.inter.company</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <filter name="my_sale_orders_filter" position="after">
+                <filter string="Inter-Company Orders" 
+                        name="inter_company_orders"
+                        domain="[('is_inter_company', '=', True)]"/>
+                <filter string="Waiting IC Approval"
+                        name="waiting_ic_approval"
+                        domain="[('inter_company_state', '=', 'waiting_approval')]"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

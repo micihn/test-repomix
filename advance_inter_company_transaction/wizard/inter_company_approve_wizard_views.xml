@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_inter_company_approve_wizard_form" model="ir.ui.view">
+        <field name="name">inter.company.approve.wizard.form</field>
+        <field name="model">inter.company.approve.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Inter-Company Approval">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="order_id" readonly="1" 
+                                   attrs="{'invisible': [('order_id', '=', False)]}"/>
+                            <field name="purchase_id" readonly="1"
+                                   attrs="{'invisible': [('purchase_id', '=', False)]}"/>
+                            <field name="approval_type" widget="radio"/>
+                        </group>
+                    </group>
+                    <group string="Approval Note">
+                        <field name="note" nolabel="1" placeholder="Enter any comments or notes about this approval/rejection..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_process" 
+                            string="Confirm" 
+                            type="object" 
+                            class="btn-primary" 
+                            data-hotkey="q"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel" 
+                            data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_inter_company_approve_wizard" model="ir.actions.act_window">
+        <field name="name">Inter-Company Approval</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">inter.company.approve.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- Menu Action for Purchase Orders -->
+    <record id="action_inter_company_approve_wizard_purchase" model="ir.actions.act_window">
+        <field name="name">Inter-Company Approval</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">inter.company.approve.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_purchase_order"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>
