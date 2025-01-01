@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Record Rules -->
+        <record id="intercompany_transaction_company_rule" model="ir.rule">
+            <field name="name">Inter Company Transaction: Multi-Company Rule</field>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('intercompany_transaction.group_intercompany_transaction_user'))]"/>
+        </record>
+
+        <!-- Default Configuration Parameters -->
+        <record id="default_intercompany_transaction_type" model="ir.config_parameter">
+            <field name="key">intercompany_transaction.type</field>
+            <field name="value">sync_order</field>
+        </record>
+
+        <record id="default_intercompany_validation_type" model="ir.config_parameter">
+            <field name="key">intercompany_transaction.validation_type</field>
+            <field name="value">no_validation</field>
+        </record>
+
+        <!-- Initial Manager Group -->
+        <record id="base.user_admin" model="res.users">
+            <field name="groups_id" eval="[(4, ref('intercompany_transaction.group_intercompany_transaction_manager'))]"/>
+        </record>
+    </data>
+
+    <!-- Access Rules -->
+    <data noupdate="0">
+        <!-- Sales Order Rules -->
+        <record id="intercompany_sale_order_rule" model="ir.rule">
+            <field name="name">Inter Company Sales Order Rule</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="domain_force">[
+                '|',
+                    ('company_id', '=', False),
+                    '|',
+                        ('company_id', 'in', company_ids),
+                        ('is_intercompany_transaction', '=', True)
+            ]</field>
+            <field name="groups" eval="[(4, ref('intercompany_transaction.group_intercompany_transaction_user'))]"/>
+        </record>
+
+        <!-- Purchase Order Rules -->
+        <record id="intercompany_purchase_order_rule" model="ir.rule">
+            <field name="name">Inter Company Purchase Order Rule</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="domain_force">[
+                '|',
+                    ('company_id', '=', False),
+                    '|',
+                        ('company_id', 'in', company_ids),
+                        ('is_intercompany_transaction', '=', True)
+            ]</field>
+            <field name="groups" eval="[(4, ref('intercompany_transaction.group_intercompany_transaction_user'))]"/>
+        </record>
+
+        <!-- Invoice Rules -->
+        <record id="intercompany_invoice_rule" model="ir.rule">
+            <field name="name">Inter Company Invoice Rule</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="domain_force">[
+                '|',
+                    ('company_id', '=', False),
+                    '|',
+                        ('company_id', 'in', company_ids),
+                        ('is_intercompany_transaction', '=', True)
+            ]</field>
+            <field name="groups" eval="[(4, ref('intercompany_transaction.group_intercompany_transaction_user'))]"/>
+        </record>
+    </data>
+</odoo>

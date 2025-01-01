@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.intercompany</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Inter Company Transaction" string="Inter Company Transaction" data-key="intercompany_transaction">
+                    <h2>Inter Company Transaction Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Transaction Type</span>
+                                <div class="text-muted">
+                                    Choose the type of inter-company transactions to synchronize
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="intercompany_transaction_type" class="o_light_label" widget="radio"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Validation Type</span>
+                                <div class="text-muted">
+                                    Select how inter-company transactions should be validated
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="intercompany_validation_type" class="o_light_label"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Default Approval Manager</span>
+                                <div class="text-muted">
+                                    Select default approval manager for inter-company transactions
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="approval_manager_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

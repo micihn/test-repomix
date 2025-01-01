@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit_intercompany" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.intercompany</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_reference']" position="after">
+                <field name="is_intercompany_transaction"/>
+                <field name="intercompany_move_id" readonly="1" 
+                       attrs="{'invisible': [('is_intercompany_transaction', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_move_tree_inherit_intercompany" model="ir.ui.view">
+        <field name="name">account.move.tree.inherit.intercompany</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="is_intercompany_transaction" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_move_filter_inherit_intercompany" model="ir.ui.view">
+        <field name="name">account.move.select.inherit.intercompany</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='posted']" position="after">
+                <filter string="Inter Company Transactions" name="intercompany_transactions" 
+                        domain="[('is_intercompany_transaction', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_move_form_inherit_intercompany_approval" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.intercompany.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_approve_intercompany" 
+                        string="Approve Inter Company" 
+                        type="object"
+                        groups="intercompany_transaction.group_intercompany_transaction_manager"
+                        attrs="{'invisible': ['|', 
+                                           ('is_intercompany_transaction', '=', False),
+                                           ('intercompany_state', '!=', 'waiting_approval')]}"/>
+                <button name="action_reject_intercompany" 
+                        string="Reject Inter Company" 
+                        type="object"
+                        groups="intercompany_transaction.group_intercompany_transaction_manager"
+                        attrs="{'invisible': ['|', 
+                                           ('is_intercompany_transaction', '=', False),
+                                           ('intercompany_state', '!=', 'waiting_approval')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='is_intercompany_transaction']" position="after">
+                <field name="intercompany_state" 
+                       attrs="{'invisible': [('is_intercompany_transaction', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
